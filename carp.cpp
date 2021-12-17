@@ -1,11 +1,79 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include <queue>
 
 
 using namespace std;
 
-void graph(double* A, int n, double* DA)
+void newGraph(double* A, int n, double* DA)//A - ishodnaya matrica, n - razmer, DA - vihodnoi graph
+{
+    queue<int> DX, DY;
+
+    int cap = n*n;
+    float front[cap];
+    for(int i = 0; i < cap; i++)
+    {
+        DA[i] = 0; //5
+        front[i] = INFINITY; //6
+    }
+
+    queue<int> Q1, Q2, Xfree, Yfree;//7
+
+    float Xdouble[n], Ydouble[n];//dlya so4etanij
+    for (int i = 0; i < n; i++)
+    {
+        Xdouble[i] = NAN;
+        Ydouble[i] = NAN;
+    }
+
+    int x = 1, y = 1;//4tobi perebirat' elementi matrici s pomoshu X*Y (tak zhe mojno?)
+    for(;x<=n; x++)//8 pereproverit'
+    {
+        if (Xdouble[x] == NAN)//9
+        {
+            Q2.push(x);
+            Xfree.push(x);//11
+            DX.push(x);
+            front[x]=0;//12
+        }
+    }
+
+    while(!Q2.empty())
+    {
+        Q1.push(Q2.front);
+        Q2.pop(); //15
+    }
+
+    int z = 0;
+    while(!Q1.empty() || !Yfree.empty() || !Q2.empty())//16 + 37 opyat' ne uveren 4to tuda kuda nado zasunul
+    {
+        x = q1.front();//18
+        for(; y <= n; y++)//19 pereproverit'
+        {
+            if(A[x*y] != 0 && front[x] < front[y])//20 a kak inf mojet bit menshe chem inf?
+            {
+                DA[x*y] = 1;//23 pust' budet poka bez vesa
+                if (front[y] == INFINITY)//24
+                {
+                    DY.push(y);
+                    z = Ydouble[y];//26
+                    front[y] = front[x] + 1;//27
+                    if (z!=0)//28 to4no 0? mojet vse taki nan?
+                    {
+                        DA[z*y] = 1;
+                        DX.push(z);//30
+                        front[z] = front[y] + 1;
+                        Q2.push(z);//31
+                    }
+                    else Yfree.push(y);//33
+                }
+            }
+        }
+    }
+}
+
+void oldGraph(double* A, int n, double* DA) // legacy, for reference
 {
     int Dx[n], Dy[n];
     int counterForDx, counterForDy = 0;
