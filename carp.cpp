@@ -11,7 +11,7 @@ void newGraph(double* A, int n, double* DA)//A - ishodnaya matrica, n - razmer, 
     queue<int> DX, DY;
 
     int cap = n*n;
-    float front[cap];
+    double front[cap];
     for(int i = 0; i < cap; i++)
     {
         DA[i] = 0; //5
@@ -20,15 +20,15 @@ void newGraph(double* A, int n, double* DA)//A - ishodnaya matrica, n - razmer, 
 
     queue<int> Q1, Q2, Xfree, Yfree;//7
 
-    float Xdouble[n], Ydouble[n];//dlya so4etanij
+    double Xdouble[n], Ydouble[n];//dlya so4etanij
     for (int i = 0; i < n; i++)
     {
         Xdouble[i] = NAN;
         Ydouble[i] = NAN;
     }
 
-    int x = 1, y = 1;//4tobi perebirat' elementi matrici s pomoshu X*Y (tak zhe mojno?)
-    for(;x<=n; x++)//8 pereproverit'
+    int x = 0, y = 0; 
+    for(;x<n; x++)//8 pereproverit'
     {
         if (Xdouble[x] == NAN)//9
         {
@@ -51,9 +51,9 @@ void newGraph(double* A, int n, double* DA)//A - ishodnaya matrica, n - razmer, 
         x = q1.front();//18
         for(; y <= n; y++)//19 pereproverit'
         {
-            if(A[x*y] != 0 && front[x] < front[y])//20 a kak inf mojet bit menshe chem inf?
+            if(A[x + y*n] != 0 && front[x] < front[y])//20 
             {
-                DA[x*y] = 1;//23 pust' budet poka bez vesa
+                DA[x + y*n] = 1;//23 pust' budet poka bez vesa
                 if (front[y] == INFINITY)//24
                 {
                     DY.push(y);
@@ -61,7 +61,7 @@ void newGraph(double* A, int n, double* DA)//A - ishodnaya matrica, n - razmer, 
                     front[y] = front[x] + 1;//27
                     if (z!=0)//28 to4no 0? mojet vse taki nan?
                     {
-                        DA[z*y] = 1;
+                        DA[z + y*n] = 1;
                         DX.push(z);//30
                         front[z] = front[y] + 1;
                         Q2.push(z);//31
